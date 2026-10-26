@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "inventory-pubsub"
+version = "0.1.0"
+description = "Склад с pub/sub: inventory_api (aiohttp) + analytics_worker (Redis Pub/Sub), PostgreSQL"
+requires-python = ">=3.10"
+dependencies = [
+    "aiohttp>=3.11",
+    # в целях соответствия требованиям Python 3.10+
+    "sqlalchemy[asyncio]>=2.0.36,<2.1",
+    "asyncpg>=0.30",
+    "redis>=5.2",
+    "alembic>=1.14",
+    "pydantic>=2.9",
+    # в целях соответствия требованиям Python 3.10+
+    "pydantic-settings>=2.6,<2.16",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3",
+    "pytest-asyncio>=0.24",
+    "pytest-aiohttp>=1.1",
+]
+
+[tool.setuptools.packages.find]
+include = ["inventory_api*", "analytics_worker*", "common*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
