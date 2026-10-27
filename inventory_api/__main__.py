@@ -1,8 +1,9 @@
 import logging
 
-from common.config import get_settings
+from aiohttp import web
 
-logger = logging.getLogger("inventory_api")
+from common.config import get_settings
+from inventory_api.app import create_app
 
 
 def main() -> None:
@@ -11,7 +12,7 @@ def main() -> None:
         format="%(asctime)s %(levelname)s %(name)s: %(message)s",
     )
     settings = get_settings()
-    logger.info("inventory_api starting (port=%s)", settings.api_port)
+    web.run_app(create_app(settings), port=settings.api_port)
 
 
 if __name__ == "__main__":
