@@ -1,18 +1,19 @@
+import asyncio
 import logging
 
+from analytics_worker.worker import install_signal_handlers, run_worker
 from common.config import get_settings
 
-logger = logging.getLogger("analytics_worker")
+
+async def main() -> None:
+    stop = asyncio.Event()
+    install_signal_handlers(stop)
+    await run_worker(get_settings(), stop)
 
 
-def main() -> None:
+if __name__ == "__main__":
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s %(levelname)s %(name)s: %(message)s",
     )
-    settings = get_settings()
-    logger.info("analytics_worker starting (redis=%s)", settings.redis_url)
-
-
-if __name__ == "__main__":
-    main()
+    asyncio.run(main())
